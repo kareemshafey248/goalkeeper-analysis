@@ -121,8 +121,15 @@ h1, h2, h3 {
 # ── Load data ──────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    base = Path(__file__).parent.parent / "data" / "processed"
-    df = pd.read_csv(base / "gk_ranked.csv")
+    base_dir = Path(__file__).parent
+    
+    # Handles both folder structures (if app.py is inside a dashboard folder OR in the root repository)
+    if (base_dir.parent / "data" / "processed" / "gk_ranked.csv").exists():
+        csv_path = base_dir.parent / "data" / "processed" / "gk_ranked.csv"
+    else:
+        csv_path = base_dir / "data" / "processed" / "gk_ranked.csv"
+        
+    df = pd.read_csv(csv_path)
     return df
 
 df = load_data()
